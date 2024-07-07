@@ -1,0 +1,36 @@
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[user]
+	name = Nihal
+	email = cpnihal2011@gmail.com
+[core]
+    pager = delta
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true    # use n and N to move between diff sections
+
+    file-style = 'red bold "#ffeeee"' #'red bold ul "#ffeeee"'
+
+    #paging = "auto"  # auto, always, and never. 
+	
+    side-by-side = true
+    # line-numbers-left-format = ""    # Remove line numbers from left side.
+    # line-numbers-right-format = "│ "  # Remove line numbers from right side.
+
+    line-numbers = true
+
+    # delta detects terminal colors automatically; set one of these to disable auto-detection
+    # dark = true
+    # light = true
+
+[merge]
+    conflictstyle = diff3
+
+[diff]
+    colorMoved = default
