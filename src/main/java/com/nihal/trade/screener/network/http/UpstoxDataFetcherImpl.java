@@ -20,13 +20,13 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.nihal.trade.screener.constants.TimeFrame;
-import com.nihal.trade.screener.data.DataPoint;
+import com.nihal.trade.screener.data.Candle;
 import com.nihal.trade.screener.network.http.exceptions.FetchFailedException;
 
 public class UpstoxDataFetcherImpl implements DataFetcher{
 
     @Override
-    public List<DataPoint> fetchData(String symbol, Instant startDate, Instant endDate, TimeFrame timeFrame) throws FetchFailedException {
+    public List<Candle> fetchData(String symbol, Instant startDate, Instant endDate, TimeFrame timeFrame) throws FetchFailedException {
 
         URI uri;
         try {
@@ -55,7 +55,7 @@ public class UpstoxDataFetcherImpl implements DataFetcher{
             throw new FetchFailedException(ex.getMessage());
         }    
         
-        List<DataPoint> data = new ArrayList<>();
+        List<Candle> data = new ArrayList<>();
 
         if(response != null) {
             String body = response.body();
@@ -73,7 +73,7 @@ public class UpstoxDataFetcherImpl implements DataFetcher{
                     ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateTimeString, formatter);
                     Instant instant = zonedDateTime.toInstant();
 
-                    DataPoint dataPoint = new DataPoint(instant,
+                    Candle dataPoint = new Candle(instant,
                                          candleData.get(1).getAsDouble(),
                                          candleData.get(2).getAsDouble(), 
                                          candleData.get(3).getAsDouble(), 

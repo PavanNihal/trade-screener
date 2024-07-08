@@ -2,7 +2,7 @@ package com.nihal.trade.screener.data;
 
 import java.time.Instant;
 
-public class DataPoint {
+public class Candle {
 
     private final double high;
     private final double low;
@@ -12,7 +12,7 @@ public class DataPoint {
     private final long volume;
     private final long openInterest;
     
-    public DataPoint(Instant time, double open, double high, double low, double close, long volume, long openInterest) {
+    public Candle(Instant time, double open, double high, double low, double close, long volume, long openInterest) {
         this.high = high;
         this.low = low;
         this.open = open;
