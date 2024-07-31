@@ -1,6 +1,6 @@
 package com.nihal.trade.screener.data;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 public class Candle {
 
@@ -8,11 +8,11 @@ public class Candle {
     private final double low;
     private final double open;
     private final double close;
-    private final Instant time;
+    private final LocalDateTime time;
     private final long volume;
     private final long openInterest;
     
-    public Candle(Instant time, double open, double high, double low, double close, long volume, long openInterest) {
+    public Candle(LocalDateTime time, double open, double high, double low, double close, long volume, long openInterest) {
         this.high = high;
         this.low = low;
         this.open = open;
@@ -38,7 +38,7 @@ public class Candle {
         return close;
     }
 
-    public Instant getTime() {
+    public LocalDateTime getTime() {
         return time;
     }
 

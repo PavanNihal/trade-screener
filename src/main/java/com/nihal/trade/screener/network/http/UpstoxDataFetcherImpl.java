@@ -14,7 +14,10 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import org.springframework.stereotype.Component;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -23,6 +26,7 @@ import com.nihal.trade.screener.constants.TimeFrame;
 import com.nihal.trade.screener.data.Candle;
 import com.nihal.trade.screener.network.http.exceptions.FetchFailedException;
 
+@Component
 public class UpstoxDataFetcherImpl implements DataFetcher{
 
     @Override
@@ -59,7 +63,6 @@ public class UpstoxDataFetcherImpl implements DataFetcher{
 
         if(response != null) {
             String body = response.body();
-            System.out.println(body);
             JsonObject responseJson = new Gson().fromJson(body, JsonObject.class);
 
             if(responseJson.get("status").getAsString().equals("success")) {
@@ -71,9 +74,8 @@ public class UpstoxDataFetcherImpl implements DataFetcher{
                     String dateTimeString = candleData.get(0).getAsString();
                     DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME; // Handles timezone offset
                     ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateTimeString, formatter);
-                    Instant instant = zonedDateTime.toInstant();
 
-                    Candle dataPoint = new Candle(instant,
+                    Candle dataPoint = new Candle(zonedDateTime.toLocalDateTime(),
                                          candleData.get(1).getAsDouble(),
                                          candleData.get(2).getAsDouble(), 
                                          candleData.get(3).getAsDouble(), 
@@ -85,10 +87,11 @@ public class UpstoxDataFetcherImpl implements DataFetcher{
                 }
             }
             else if(responseJson.get("status").getAsString().equals("error")) {
-                System.out.println(body);
+                throw new FetchFailedException();
             }
         }
 
+        Collections.reverse(data);
 
         return data;
 
