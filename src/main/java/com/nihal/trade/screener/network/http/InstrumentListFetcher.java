@@ -7,7 +7,7 @@ import com.nihal.trade.screener.repository.InstrumentRepository;
 @Component
 public abstract class InstrumentListFetcher {
 
-    private InstrumentRepository instrumentRepository;
+    protected InstrumentRepository instrumentRepository;
 
     public InstrumentListFetcher(InstrumentRepository instrumentRepository) {
         this.instrumentRepository = instrumentRepository;

@@ -4,6 +4,9 @@ import java.util.*;
 import java.net.URL;
 import java.io.InputStream;
 import java.util.zip.GZIPInputStream;
+
+import org.springframework.stereotype.Component;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -14,6 +17,7 @@ import com.nihal.trade.screener.data.Instrument.Segment;
 import com.nihal.trade.screener.network.http.InstrumentListFetcher;
 import com.nihal.trade.screener.repository.InstrumentRepository;
 
+@Component
 public class UpstoxInstrumentListFetcher extends InstrumentListFetcher {
     
     public UpstoxInstrumentListFetcher(InstrumentRepository instrumentRepository) {
@@ -40,11 +44,14 @@ public class UpstoxInstrumentListFetcher extends InstrumentListFetcher {
                     if(segment != Segment.NSE_EQ) {
                         continue;
                     }
+                    String instrumentType = instrumentJson.get("instrument_type").getAsString();
+                    if(!"EQ".equals(instrumentType)) {
+                        continue;
+                    }
 
                     String name = instrumentJson.get("name").getAsString();
                     Exchange exchange = Exchange.valueOf(instrumentJson.get("exchange").getAsString());
-                    String isin = instrumentJson.get("isin").getAsString();
-                    String instrumentType = instrumentJson.get("instrument_type").getAsString();
+                    String isin = instrumentJson.get("isin").getAsString();                    
                     String instrumentKey = instrumentJson.get("instrument_key").getAsString();
                     int lotSize = instrumentJson.get("lot_size").getAsInt();
                     int freezeQuantity = instrumentJson.get("freeze_quantity").getAsInt();
@@ -57,6 +64,9 @@ public class UpstoxInstrumentListFetcher extends InstrumentListFetcher {
                     instrumentList.add(new Instrument(segment, name, exchange, isin, instrumentType, instrumentKey, 
                                 lotSize, freezeQuantity, exchangeToken, tickSize, tradingSymbol, shortName, securityType));
                 }
+
+                this.instrumentRepository.deleteAll();
+                this.instrumentRepository.saveAll(instrumentList);
 
             }
         }

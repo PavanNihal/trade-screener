@@ -1,5 +1,10 @@
 package com.nihal.trade.screener.data;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+@Entity(name = "instruments")
 public class Instrument {
 
     public enum Segment {
@@ -24,17 +29,40 @@ public class Instrument {
     private String name;
     private Exchange exchange;
     private String isin;
+
+    @Column(name="instrument_type")
     private String instrumentType;
+
+    @Id
+    @Column(name="instrument_key")
     private String key;
+
+    @Column(name="lot_size")
     private int lotSize;
+
+    @Column(name="freeze_quantity")
     private int freezeQuantity;
+
+    @Column(name="exchange_token")
     private String exchangeToken;
+
+    @Column(name="tick_size")
     private float tickSize;
+
+    @Column(name="trading_symbol")
     private String tradingSymbol;
+
+    @Column(name="short_name")
     private String shortName;
+
+    @Column(name="security_type")
     private String securityType;
 
 
+    public Instrument() {
+
+    }
+    
     public Instrument(Segment segment, String name, Exchange exchange, String isin, String instrumentType, String key,
             int lotSize, int freezeQuantity, String exchangeToken, float tickSize, String tradingSymbol,
             String shortName, String securityType) {

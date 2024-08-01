@@ -11,14 +11,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nihal.trade.screener.constants.TimeFrame;
 import com.nihal.trade.screener.data.Candle;
 import com.nihal.trade.screener.network.http.DataFetcher;
+import com.nihal.trade.screener.network.http.InstrumentListFetcher;
 
 @RestController
 public class ChartController {
 
     DataFetcher dataFetcher;
+    InstrumentListFetcher instrumentListFetcher;
 
-    public ChartController(DataFetcher dataFetcher) {
+    public ChartController(DataFetcher dataFetcher, InstrumentListFetcher instrumentListFetcher) {
         this.dataFetcher = dataFetcher;
+        this.instrumentListFetcher = instrumentListFetcher;
     }
     
     @GetMapping("/data/historic")
@@ -30,5 +33,12 @@ public class ChartController {
         var data = dataFetcher.fetchData(symbol, startDate, endDate, TimeFrame.DAY);
         
         return data;
+    }
+
+
+    @GetMapping("data/list")
+    public String updateList() {
+        instrumentListFetcher.fetchInstruments();
+        return "success";
     }
 }
